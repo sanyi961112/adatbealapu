@@ -12,6 +12,12 @@ Felhasznált Framework-ök:
 Felhasznált Programok:
 - Oracle SQL Developer
 - Docker Desktop
+- Webstorm
+- Oracle Instant Client 21
 
 Felhasznált Docker image:
 - truevoly/oracle-12c
+
+Felhasznált packagek az adatbázis eléréshez:
+- npm - oracledb
+- npm - @types/oracledb
