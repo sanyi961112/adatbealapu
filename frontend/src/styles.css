@@ -1,1 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+body{
+  margin: 0;
+  padding: 0;
+}
+input{
+  outline: none;
+}
+button{
+  cursor: pointer;
+}
+.login-container{
+  display: flex;
+  flex-direction: row;
+  background-color: #c4eefc;
+  width: 90vw;
+  margin: 2em auto auto auto;
+  height: 50%;
+  border: 0px;
+  border-radius: 1em;
+}
+.login-div {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+.format{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 2em auto 2em auto;
+}
+.login-paddings{
+  display: flex;
+  flex-direction: column;
+  padding: 1em 0em 1em;
+}
+.btn-login{
+  width: 5em;
+  color: whitesmoke;
+  background-color: #003377;
+  padding: 1em 0 1em 0;
+  border: 0px;
+  border-radius: 4px;
+}
+.btn-container{
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.btn-nav{
+  width: 10em;
+}
