@@ -9,6 +9,13 @@ button{
   cursor: pointer;
 }
 
+#title{
+  font-family: Arial;
+  font-size: 54px;
+  margin-left: 1em;
+  margin-top: auto;
+  margin-bottom: auto;
+}
 .navbar{
   display: flex;
   flex-direction: row;
@@ -23,7 +30,7 @@ button{
   display: flex;
   flex-direction: row;
   background-color: #c4eefc;
-  width: 90vw;
+  width: 95vw;
   margin: 2em auto auto auto;
   height: 50%;
   border: 0px;
@@ -63,4 +70,15 @@ button{
 }
 .btn-nav{
   width: 10em;
+}
+.buttons{
+  display: flex;
+  justify-content: center;
+  margin: auto 1em auto 1em;
+  flex-direction: row;
+  min-width: 10em;
+}
+
+.profile-container {
+
 }

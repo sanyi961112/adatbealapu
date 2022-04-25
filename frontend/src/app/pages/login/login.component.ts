@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-
+import {RestService} from "../../services/rest.service";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     password2: new FormControl(),
   });
 
-  constructor() { }
+  constructor(private rest: RestService) { }
 
   ngOnInit(): void {
   }
@@ -43,11 +43,23 @@ export class LoginComponent implements OnInit {
       if (this.loginForm.invalid){
         return;
       }
-      const regUsername = this.registerForm.controls['username'].value;
-      const regPassword = this.registerForm.controls['password'].value;
-      const regFullname = this.registerForm.controls['fullname'].value;
+      const regUser = this.registerForm.controls['username'].value;
+      const regPass = this.registerForm.controls['password'].value;
+      const regPass2 = this.registerForm.controls['password2'].value;
+      const regFull = this.registerForm.controls['fullname'].value;
       const regEmail = this.registerForm.controls['email'].value;
+      if(regPass !== regPass2){
+        return;
+      }
+      const newUser = {
+        username: regUser,
+        password: regPass,
+        full_name: regFull,
+        email: regEmail,
+        location: "",
+      }
 
+      this.rest.registerUser(newUser);
     } catch (e){
       console.log(e);
     }

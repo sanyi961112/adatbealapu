@@ -1,54 +1,33 @@
 const express = require('express')
 const oracledb = require('oracledb');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 const password = 'devilmaycry4';
 let connection;
-let result;
-
-async function selectAllUsers(req, res) {
+app.use(cors());
+app.use(express.json());
+app.post('/register', registerUser);
+async function registerUser(req, res){
+    let result;
     try {
-        let connection = await oracledb.getConnection({
+        console.log('something is happening');
+        const newUser = req.body;
+        const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
             connectString: "localhost:1521/xe"
         });
-        console.log('sikeres csatlakozas az adatbazishoz');
-        result = await connection.execute(`SELECT * FROM USRS`);
-    } catch (err) {
-        return res.send(err.message);
-    } finally {
-        if (connection) {
-            try {
-                await connection.close();
-                console.log('sikeres kilepes');
-            } catch (err) {
-                console.error(err.message);
-            }
-        }
-        if (result.rows.length == 0) {
-            return res.send('nincsenek sorok');
-        } else {
-            return res.send(result.rows);
-        }
-
-    }
-}
-
-app.get('/users', function (req, res) {
-    selectAllUsers(req, res);
-})
-
-async function selectEmployeesById(req, res, id) {
-    try {
-        connection = await oracledb.getConnection({
-            user: "SZABO",
-            password: password,
-            connectString: "localhost:1521/xe"
+        result = await connection.execute(
+            `INSERT INTO "SZABO"."USRS"(USERNAME, PASSWORD, FULL_NAME, EMAIL, LOCATION) 
+        VALUES (:username,:password,:fullname,:email,:location)`,
+            [newUser.username, newUser.password, newUser.full_name, newUser.email, newUser.location]);
+        await connection.commit();
+        res.status(201).json({
+            message: "user created"
         });
-        result = await connection.execute(`SELECT * FROM USRS where username=:id`, [id]);
-
     } catch (err) {
+        console.log(err.message)
         return res.send(err.message);
     } finally {
         if (connection) {
@@ -58,21 +37,35 @@ async function selectEmployeesById(req, res, id) {
                 return console.error(err.message);
             }
         }
-        if (result.rows.length === 0) {
-            return res.send('nincsenek eredmeny sorok');
-        } else {
-            return res.send(result.rows);
+    }
+}
+app.get('/profile', getUserProfile);
+async function getUserProfile(req, res){
+    let result;
+    try {
+        console.log('something is happening');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT * FROM "SZABO"."USRS" WHERE USERNAME=:username`,
+            [req.query.username]);
+        console.log('finished');
+        res.status(201).json(result.rows);
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
         }
     }
 }
 
-app.get('/users', function (req, res) {
-    let id = req.query.id;
-    if (isNaN(id)) {
-        res.send('Query param id is not number')
-        return
-    }
-    selectUsersById(req, res, id);
-})
-
-app.listen(port, () => console.log("app listening on port %s!", port))
+app.listen(port, () => console.log("app listening on port %s", port));
