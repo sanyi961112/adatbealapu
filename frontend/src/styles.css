@@ -8,6 +8,17 @@ input{
 button{
   cursor: pointer;
 }
+
+.navbar{
+  display: flex;
+  flex-direction: row;
+  background-color: #add0ff;
+  height: 4em;
+}
+.padding{
+  width: 100%;
+}
+
 .login-container{
   display: flex;
   flex-direction: row;
@@ -37,7 +48,7 @@ button{
   padding: 1em 0em 1em;
 }
 .btn-login{
-  width: 5em;
+  width: 7em;
   color: whitesmoke;
   background-color: #003377;
   padding: 1em 0 1em 0;
