@@ -44,7 +44,7 @@ async function selectEmployeesById(req, res, id) {
         connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
-            connectString: "localhost:1521/xepdb1"
+            connectString: "localhost:1521/xe"
         });
         result = await connection.execute(`SELECT * FROM USRS where username=:id`, [id]);
 
@@ -75,4 +75,4 @@ app.get('/users', function (req, res) {
     selectUsersById(req, res, id);
 })
 
-app.listen(port, () => console.log("nodeOracleRestApi app listening on port %s!", port))
+app.listen(port, () => console.log("app listening on port %s!", port))
