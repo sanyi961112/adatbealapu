@@ -14,8 +14,9 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'profile',
+    path: 'profile/:username',
     component: ProfileComponent,
+    pathMatch: 'full'
   },
   { path: '**', redirectTo: 'main' }
 ];

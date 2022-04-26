@@ -1,11 +1,32 @@
 <app-navbar></app-navbar>
 <div class="profile-container">
-  <div class="">Profile</div>
-  <div>
+  <h1 style="font-family: Arial">Profile</h1>
+  <div class="container">
+    <div style="width: 10em">Username:</div>
     <div></div>
-    <div></div>
+    <div *ngIf="isLoginUserProfile">(cannot be changed)</div>
   </div>
-  <div class="photos-all">
+  <div class="container">
+    <div style="width: 10em">Full name:</div>
+    <div *ngIf="isLoginUserProfile"><input type="text"></div>
+  </div>
+  <div class="container">
+    <div style="width: 10em">E-mail:</div>
+    <div *ngIf="isLoginUserProfile"><input type="text"></div>
+  </div>
+  <div class="container">
+    <div style="width: 10em">Location:</div>
+    <div *ngIf="isLoginUserProfile">
+      <select>
+        <option disabled>Choose location</option>
+<!--        <option *ngFor=""></option>-->
+      </select>
+    </div>
+  </div>
+  <div *ngIf="isLoginUserProfile" class="container">
+    <button class="btn-login btn-nav" type="submit">Update My Profile</button>
+  </div>
+  <div class="photos-of-user">
 
   </div>
 </div>

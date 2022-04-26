@@ -22,20 +22,28 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/register', newUser).toPromise();
     return(message);
   }
+  async getProfile(username: string){
+    console.log(username);
+    console.log('get profile of this user');
+    const profile = await this.http.get('http://localhost:3000/profile' + username);
+    return profile;
+  }
 
   /* get all the photos of the owner for profile
    */
-  async getPhotos(owner: string){
-    await this.http.get('http://localhost:3000/photos?').subscribe({
-      next: data => {
-        console.log(data);
-      },
-      error: error => {
-        console.error('There was an error!', error);
-      }
-    });
-    console.log('getting all photos of this owner');
-  }
+  // async getPhotos(owner: string){
+  //   await this.http.get('http://localhost:3000/photos?').subscribe({
+  //     next: data => {
+  //       console.log(data);
+  //     },
+  //     error: error => {
+  //       console.error('There was an error!', error);
+  //     }
+  //   });
+  //   console.log('getting all photos of this owner');
+  // }
+
+
 
   // async saveNewPhoto(photo: any){
   //   console.log('add new photo of this owner');
@@ -49,10 +57,7 @@ export class RestService {
   //   console.log('add new rating of this photo');
   // }
   //
-  async getProfile(username: string){
-    console.log('get profile of this user');
-    this.http.get('http://localhost:3000/profile?username=' + username,);
-  }
+
   //
   // async getCities(cityName: string){
   //   console.log('');

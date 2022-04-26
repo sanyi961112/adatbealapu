@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/register', registerUser);
-
+/* register user with taken username check */
 async function registerUser(req, res) {
     let result;
     try {
@@ -60,10 +60,11 @@ async function registerUser(req, res) {
 }
 
 app.get('/profile', getUserProfile);
+/*get profile data by username*/
 async function getUserProfile(req, res) {
     let result;
     try {
-        console.log('something is happening');
+        console.log('profile checking');
         const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
@@ -73,7 +74,7 @@ async function getUserProfile(req, res) {
             `SELECT *
              FROM "SZABO"."USRS"
              WHERE USERNAME = :username`,
-            [req.query.username]);
+            [req.query.username], {outFormat: oracledb.OUT_FORMAT_OBJECT});
         console.log('Got user profile!');
         res.status(201).json(result.rows);
     } catch (err) {
