@@ -46,12 +46,15 @@ export class LoginComponent implements OnInit {
         username: loginUser,
         password: loginPass
       }
-      if (this.loginForm.invalid || loginUser === '' || loginPass === ''){
-        console.log("the form is invalid, please check it")
+      if (this.loginForm.invalid){
+        this.toastr.info("the form is invalid, please check it", "Notice")
+        return;
+      }
+      if (loginUser === '' || loginPass === ''){
+        this.toastr.info("Make sure to fill out the username and password fields", "Notice")
         return;
       }
       this.message = await this.rest.loginUser(currentLogin);
-      console.log(this.message);
       if(this.message['message'] === 'user authenticated'){
         localStorage.setItem('isLoggedIn', JSON.parse('true'));
         localStorage.setItem('currentUser', loginUser);
@@ -65,7 +68,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  registerUser(): void{
+  async registerUser(): Promise<any> {
     try {
       if (this.registerForm.invalid){
         return;
@@ -85,10 +88,14 @@ export class LoginComponent implements OnInit {
         email: regEmail,
         location: "",
       }
-
-      this.rest.registerUser(newUser);
+      this.message = await this.rest.registerUser(newUser);
+      console.log(this.message);
+      if(this.message['message'] === 'user taken'){
+        this.toastr.info('This Username is already taken, choose another one!', 'Notice');
+        return;
+      }
       this.registerForm.reset();
-      this.toastr.success('You are now registered, try to log in', 'Success')
+      this.toastr.success('You are now registered', 'Success');
     } catch (e){
       console.log(e);
     }

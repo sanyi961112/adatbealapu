@@ -12,15 +12,15 @@ export class RestService {
 
   }
 
-  async loginUser(currentLogin: any){
+  async loginUser(currentLogin: any): Promise<any>{
     console.log('logging in user');
     const message = await this.http.post('http://localhost:3000/login', currentLogin).toPromise();
     return(message);
   }
-  async registerUser(newUser: any): Promise<void>{
+  async registerUser(newUser: any): Promise<any>{
     console.log('registering a new user');
-    await this.http.post('http://localhost:3000/register', newUser).toPromise();
-    console.log('register done');
+    const message = await this.http.post('http://localhost:3000/register', newUser).toPromise();
+    return(message);
   }
 
   /* get all the photos of the owner for profile

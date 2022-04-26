@@ -21,11 +21,25 @@ async function registerUser(req, res) {
             connectString: "localhost:1521/xe"
         });
         newUser.password = sha256(newUser.password);
-        console.log(newUser.password);
+        /* check if username is taken */
+        let checkUsername = result = await connection.execute(
+            `SELECT *
+             FROM "SZABO"."USRS"
+             WHERE USERNAME = :username`,
+            [newUser.username], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        if(checkUsername.rows[0] !== undefined) {
+            console.log('username taken');
+            res.status(201).json({
+                message: "user taken"
+            });
+            return;
+        }
         result = await connection.execute(
             `INSERT INTO "SZABO"."USRS"(USERNAME, PASSWORD, FULL_NAME, EMAIL, LOCATION)
              VALUES (:username, :password, :fullname, :email, :location)`,
-            [newUser.username, newUser.password, newUser.full_name, newUser.email, newUser.location]);
+            [newUser.username, newUser.password, newUser.full_name, newUser.email, newUser.location],
+            { outFormat: oracledb.OUT_FORMAT_OBJECT } );
+        console.log(result.rows);
         await connection.commit();
         console.log('new user created');
         res.status(201).json({
@@ -60,7 +74,7 @@ async function getUserProfile(req, res) {
              FROM "SZABO"."USRS"
              WHERE USERNAME = :username`,
             [req.query.username]);
-        console.log('got user profile!');
+        console.log('Got user profile!');
         res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)
