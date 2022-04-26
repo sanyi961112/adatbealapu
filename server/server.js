@@ -60,7 +60,7 @@ async function getUserProfile(req, res) {
              FROM "SZABO"."USRS"
              WHERE USERNAME = :username`,
             [req.query.username]);
-        console.log('finished');
+        console.log('got user profile!');
         res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)
@@ -77,7 +77,6 @@ async function getUserProfile(req, res) {
 }
 
 app.post('/photo', savePhoto);
-
 async function savePhoto(req, res) {
     let result;
     try {
@@ -111,7 +110,7 @@ async function savePhoto(req, res) {
     }
 }
 
-app.get('/userPhotos', getPhotos);
+app.get('/photos', getPhotos);
 async function getPhotos() {
     let result;
     try {
@@ -144,7 +143,7 @@ async function getPhotos() {
 
 app.post('/login', loginUser);
 async function loginUser(req, res) {
-    console.log('trying to login');
+    console.log('a user wants to login');
     let result;
     try {
         const userLogin = req.body;
@@ -157,12 +156,12 @@ async function loginUser(req, res) {
         result = await connection.execute(
             `SELECT *
              FROM "SZABO"."USRS"
-             WHERE USERNAME = :username`,
-            [userLogin.username]);
-        if(result.rows.toString().includes(userLogin.password)){
-            console.log('user auth done')
+             WHERE USERNAME = :username AND PASSWORD = :password`,
+            [userLogin.username, userLogin.password], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        if(result.rows[0]){
+            console.log('user authenticated');
             res.status(201).json({
-                message: "user authenticated",
+                message: 'user authenticated',
             });
         } else {
             console.log('error during login');
@@ -183,6 +182,5 @@ async function loginUser(req, res) {
         }
     }
 }
-
 
 app.listen(port, () => console.log("app listening on port %s", port));

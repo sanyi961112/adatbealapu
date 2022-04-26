@@ -7,7 +7,10 @@
   <div class="padding">
   </div>
   <div class="buttons">
-    <button class="btn-login" routerLink="/login">Login</button>
+    <div class="username" *ngIf="isLoggedIn"> Welcome, {{currentUser}}</div>
+    <button *ngIf="!isLoggedIn" class="btn-login" routerLink="/login">Login</button>
+    <button *ngIf="isLoggedIn" class="btn-login" style="margin-right: 1em" (click)="toMyProfile()">My profile</button>
+    <button *ngIf="isLoggedIn" class="btn-login" routerLink="/logout" (click)="logOut()">Logout</button>
   </div>
 </div>
 

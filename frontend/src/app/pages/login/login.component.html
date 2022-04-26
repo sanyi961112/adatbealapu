@@ -1,7 +1,6 @@
 <div class="login-container">
   <div class="login-div">
     <form [formGroup]="loginForm" (submit)="loginUser()">
-<!--      {{loginForm.value | json}}-->
       <h1 style="text-align: center">Login</h1>
       <div class="format">
         <div class="login-paddings">
@@ -11,18 +10,16 @@
           Password: <input type="password" formControlName="password">
         </div>
         <div class="btn-container">
-          <button class="btn-login" type="submit">Login</button>
+          <button [disabled]="loginForm.invalid" class="btn-login" type="submit">Login</button>
         </div>
         <div class="btn-container">
           <button class="btn-login btn-nav" routerLink="main">Back to main page</button>
         </div>
       </div>
     </form>
-    {{message}}
   </div>
   <div class="login-div">
     <form [formGroup]="registerForm" (submit)="registerUser()">
-<!--      {{registerForm.value | json}}-->
       <h1 style="text-align: center">Register</h1>
       <div class="format">
         <div class="login-paddings">

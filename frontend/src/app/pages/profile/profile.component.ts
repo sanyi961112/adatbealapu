@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {RestService} from "../../services/rest.service";
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  currentUser: string = '';
+  constructor(private rest: RestService) { }
 
   ngOnInit(): void {
+    this.currentUser = JSON.stringify(localStorage.getItem('currentUser'));
+    this.rest.getProfile(this.currentUser);
   }
 
 }

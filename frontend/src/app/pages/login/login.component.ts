@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validator, Validators} from "@angular/forms";
 import {RestService} from "../../services/rest.service";
+import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -10,8 +12,8 @@ import {RestService} from "../../services/rest.service";
 export class LoginComponent implements OnInit {
   message: any;
   loginForm = new FormGroup({
-    username: new FormControl(),
-    password: new FormControl()
+    username: new FormControl( [Validators.minLength(3)]),
+    password: new FormControl([Validators.minLength(3)])
   });
   registerForm = new FormGroup({
     email: new FormControl(),
@@ -21,24 +23,43 @@ export class LoginComponent implements OnInit {
     password2: new FormControl(),
   });
 
-  constructor(private rest: RestService) { }
-
-  ngOnInit(): void {
+  constructor(private rest: RestService, private router: Router, private toastr: ToastrService) {
+    this.loginForm.controls['username'].setValue('');
+    this.loginForm.controls['password'].setValue('');
+    if (localStorage.getItem('isLoggedIn') === null){
+      localStorage.setItem('isLoggedIn', 'false');
+    }
+    if (localStorage.getItem('currentUser') === null){
+      localStorage.setItem('currentUser', '');
+    }
   }
 
-  loginUser(): void {
+  ngOnInit(): void {
+
+  }
+
+  async loginUser(): Promise<any> {
     try {
-      if (this.loginForm.invalid){
-        return;
-      }
       const loginUser = this.loginForm.controls['username'].value;
       const loginPass = this.loginForm.controls['password'].value;
       const currentLogin = {
         username: loginUser,
         password: loginPass
       }
-      this.message = this.rest.loginUser(currentLogin);
-
+      if (this.loginForm.invalid || loginUser === '' || loginPass === ''){
+        console.log("the form is invalid, please check it")
+        return;
+      }
+      this.message = await this.rest.loginUser(currentLogin);
+      console.log(this.message);
+      if(this.message['message'] === 'user authenticated'){
+        localStorage.setItem('isLoggedIn', JSON.parse('true'));
+        localStorage.setItem('currentUser', loginUser);
+        await this.router.navigate([`/main`]);
+      } else {
+        this.toastr.error('Bad username/password combo', 'Error');
+        return;
+      }
     } catch (e){
       console.log(e);
     }
@@ -46,7 +67,7 @@ export class LoginComponent implements OnInit {
 
   registerUser(): void{
     try {
-      if (this.loginForm.invalid){
+      if (this.registerForm.invalid){
         return;
       }
       const regUser = this.registerForm.controls['username'].value;
@@ -66,6 +87,8 @@ export class LoginComponent implements OnInit {
       }
 
       this.rest.registerUser(newUser);
+      this.registerForm.reset();
+      this.toastr.success('You are now registered, try to log in', 'Success')
     } catch (e){
       console.log(e);
     }
