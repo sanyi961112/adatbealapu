@@ -32,7 +32,11 @@ export class LoginComponent implements OnInit {
       }
       const loginUser = this.loginForm.controls['username'].value;
       const loginPass = this.loginForm.controls['password'].value;
-
+      const currentLogin = {
+        username: loginUser,
+        password: loginPass
+      }
+      this.rest.loginUser(currentLogin);
     } catch (e){
       console.log(e);
     }
