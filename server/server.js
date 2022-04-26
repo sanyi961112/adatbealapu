@@ -149,7 +149,6 @@ async function loginUser(req, res) {
     try {
         const userLogin = req.body;
         userLogin.password = sha256(userLogin.password.toString());
-        console.log(userLogin.password);
         const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
@@ -160,13 +159,16 @@ async function loginUser(req, res) {
              FROM "SZABO"."USRS"
              WHERE USERNAME = :username`,
             [userLogin.username]);
-        console.log(result.rows);
-        if(result.rows[2] === userLogin.password){
+        if(result.rows.toString().includes(userLogin.password)){
+            console.log('user auth done')
             res.status(201).json({
-                message: "user authenticated"
+                message: "user authenticated",
             });
         } else {
-            console.log("error during login");
+            console.log('error during login');
+            res.status(201).json({
+                message: "error during login"
+            })
         }
     } catch (err) {
         console.log(err.message)

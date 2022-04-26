@@ -8,6 +8,7 @@ import {RestService} from "../../services/rest.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  message: any;
   loginForm = new FormGroup({
     username: new FormControl(),
     password: new FormControl()
@@ -36,7 +37,8 @@ export class LoginComponent implements OnInit {
         username: loginUser,
         password: loginPass
       }
-      this.rest.loginUser(currentLogin);
+      this.message = this.rest.loginUser(currentLogin);
+
     } catch (e){
       console.log(e);
     }

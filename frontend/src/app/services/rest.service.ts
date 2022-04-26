@@ -17,10 +17,10 @@ export class RestService {
     await this.http.post('http://localhost:3000/register', newUser).toPromise();
     console.log('register done');
   }
-  async loginUser(currentLogin: any): Promise<void>{
-    console.log('loggin in user');
-    await this.http.post('http://localhost:3000/login', currentLogin).toPromise();
-    console.log('login done');
+  async loginUser(currentLogin: any){
+    console.log('logging in user');
+    const message = await this.http.post('http://localhost:3000/login', currentLogin).toPromise();
+    return('success');
   }
 
 
