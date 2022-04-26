@@ -79,6 +79,7 @@ export class LoginComponent implements OnInit {
       const regFull = this.registerForm.controls['fullname'].value;
       const regEmail = this.registerForm.controls['email'].value;
       if(regPass !== regPass2){
+        this.toastr.info('Passwords do not match!', 'Notice');
         return;
       }
       const newUser = {
@@ -95,7 +96,7 @@ export class LoginComponent implements OnInit {
         return;
       }
       this.registerForm.reset();
-      this.toastr.success('You are now registered', 'Success');
+      this.toastr.success('You are now registered, try to log in!', 'Success');
     } catch (e){
       console.log(e);
     }

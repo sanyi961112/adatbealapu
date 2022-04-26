@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {map, Observable} from "rxjs";
 
 
 @Injectable({
@@ -22,11 +23,13 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/register', newUser).toPromise();
     return(message);
   }
-  async getProfile(username: string){
+  getProfile(username: string): Observable<any>{
     console.log(username);
     console.log('get profile of this user');
-    const profile = await this.http.get('http://localhost:3000/profile' + username);
-    return profile;
+    const url = 'http://localhost:3000/profile/';
+    let parameters = new HttpParams;
+    parameters = parameters.append('username', username);
+    return this.http.get<any>( url, {params: parameters});
   }
 
   /* get all the photos of the owner for profile

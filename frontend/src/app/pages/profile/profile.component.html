@@ -3,19 +3,22 @@
   <h1 style="font-family: Arial">Profile</h1>
   <div class="container">
     <div style="width: 10em">Username:</div>
-    <div></div>
+    <div style="width: 15em">{{currentUsername}}</div>
     <div *ngIf="isLoginUserProfile">(cannot be changed)</div>
   </div>
   <div class="container">
     <div style="width: 10em">Full name:</div>
+    <div style="width: 15em">{{currentFull}}</div>
     <div *ngIf="isLoginUserProfile"><input type="text"></div>
   </div>
   <div class="container">
     <div style="width: 10em">E-mail:</div>
+    <div style="width: 15em">{{currentMail}}</div>
     <div *ngIf="isLoginUserProfile"><input type="text"></div>
   </div>
   <div class="container">
     <div style="width: 10em">Location:</div>
+    <div style="width: 15em">{{currentLocation}}</div>
     <div *ngIf="isLoginUserProfile">
       <select>
         <option disabled>Choose location</option>

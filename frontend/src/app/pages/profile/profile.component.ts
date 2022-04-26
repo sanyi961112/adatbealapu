@@ -11,7 +11,11 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class ProfileComponent implements OnInit {
   isLoginUserProfile: boolean = false;
   currentUser: string = '';
-  currentProfile = {};
+  currentProfile: any;
+  currentUsername: string = '';
+  currentFull: string = '';
+  currentMail: string = '';
+  currentLocation: string = '';
   updateForm = new FormGroup({
     username: new FormControl([]),
     full_name: new FormControl([]),
@@ -33,7 +37,14 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserProfile() {
-    this.rest.getProfile(this.currentUser);
+   this.rest.getProfile(this.currentUser).subscribe(response => {
+     this.currentProfile = response;
+     console.log(JSON.stringify(this.currentProfile));
+     this.currentUsername = this.currentProfile[0]['USERNAME'];
+     this.currentFull = this.currentProfile[0]['FULL_NAME'];
+     this.currentMail = this.currentProfile[0]['EMAIL'];
+     this.currentLocation = this.currentProfile[0]['LOCATION'];
+   });
   }
 
   updateMyProfile(){

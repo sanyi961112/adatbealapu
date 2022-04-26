@@ -4,7 +4,7 @@ const sha256 = require('js-sha256');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const password = 'devilmaycry4';
+const password = '1234';
 let connection;
 app.use(cors());
 app.use(express.json());
@@ -60,7 +60,7 @@ async function registerUser(req, res) {
 }
 
 app.get('/profile', getUserProfile);
-/*get profile data by username*/
+/*gets profile data by username*/
 async function getUserProfile(req, res) {
     let result;
     try {
@@ -75,6 +75,7 @@ async function getUserProfile(req, res) {
              FROM "SZABO"."USRS"
              WHERE USERNAME = :username`,
             [req.query.username], {outFormat: oracledb.OUT_FORMAT_OBJECT});
+        console.log(JSON.stringify(result.rows));
         console.log('Got user profile!');
         res.status(201).json(result.rows);
     } catch (err) {
@@ -157,6 +158,7 @@ async function getPhotos() {
 }
 
 app.post('/login', loginUser);
+/*logs in user if they are in the database*/
 async function loginUser(req, res) {
     console.log('a user wants to login');
     let result;
