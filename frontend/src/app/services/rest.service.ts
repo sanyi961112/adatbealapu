@@ -23,14 +23,41 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/register', newUser).toPromise();
     return(message);
   }
+  async savePhoto(photo: any){
+    console.log('saving an image');
+    const message = await this.http.post('http://localhost:3000/photo', photo).toPromise();
+    return(message);
+  }
+  async addCity(city: any): Promise<any>{
+    console.log('adding a new city');
+    const message = await this.http.post('http://localhost:3000/city', city).toPromise();
+    return(message);
+  }
   getProfile(username: string): Observable<any>{
-    console.log(username);
-    console.log('get profile of this user');
+    console.log('get profile');
     const url = 'http://localhost:3000/profile/';
     let parameters = new HttpParams;
     parameters = parameters.append('username', username);
     return this.http.get<any>( url, {params: parameters});
   }
+  getPhotos(owner: string): Observable<any>{
+    console.log('get all owned photos of user');
+    const url = 'http://localhost:3000/photos/';
+    let parameters = new HttpParams;
+    parameters = parameters.append('owner', owner);
+    return this.http.get<any>( url, {params: parameters});
+  }
+  getCategories(): Observable<any>{
+    console.log('get categories');
+    const url = 'http://localhost:3000/categories/';
+    return this.http.get<any>(url);
+  }
+  getCities(): Observable<any>{
+    console.log('get cities');
+    const url = 'http://localhost:3000/cities/';
+    return this.http.get<any>(url);
+  }
+
 
   /* get all the photos of the owner for profile
    */

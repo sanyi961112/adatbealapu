@@ -1,0 +1,71 @@
+<app-navbar></app-navbar>
+<div class="upload-container">
+  <div class="upload">
+    <div class="title" *ngIf="isLoginUserPhotos">
+      <h1>My Photos</h1>
+    </div>
+    <div class="title" *ngIf="!isLoginUserPhotos">
+      <h1>Photos of {{user}} </h1>
+    </div>
+    <div class="photo-container">
+      All photos
+      <div *ngFor="let photo of photos" class="photos-of-user">
+        {{photo.name}}
+      </div>
+    </div>
+    <div class="album-container">
+      Add new album
+    </div>
+    <div class="album-container">
+      All albums
+    </div>
+  </div>
+  <form [formGroup]="newPhotoForm" (submit)="addNewPhoto()">
+    <div class="upload" *ngIf="isLoginUserPhotos">
+      <div class="add-photo">
+        <div class="upload-stuff">
+          <label for="file">Add a New photo:</label>
+        </div>
+        <div class="upload-stuff">
+          <input type="file" id="file" accept="image/*" formControlName="image" (change)="handleUpload($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="upload-stuff" *ngIf="isLoginUserPhotos">
+      <div class="upload-inputs"><label>Title</label><input type="text" formControlName="title"/></div>
+      <div class="upload-inputs"><label>Description</label><input type="text" formControlName="description"/></div>
+      <div class="upload-inputs"><label>Categories</label>
+        <select formControlName="category">
+          <option>None</option>
+          <option *ngFor="let category of categories">{{category}}</option>
+        </select>
+      </div>
+      <div class="upload-inputs"><label>Location</label>
+        <input formControlName="location" list="searchCity">
+        <datalist id="searchCity">
+          <option *ngFor="let city of cities" value="{{city}}"></option>
+        </datalist>
+      </div>
+    </div>
+    <div class="upload-stuff" *ngIf="isLoginUserPhotos" style="margin-top: 1em">
+      <button class="btn-login btn-nav" type="submit">Save Photo</button>
+    </div>
+  </form>
+  <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
+    <form [formGroup]="newCityForm" (submit)="addNewCity()">
+      <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
+      <div class="upload-stuff">
+        <label>city name:</label>
+        <input formControlName="name" type="text"/>
+      </div>
+      <div class="upload-stuff">
+        <label>country name:</label>
+        <input formControlName="country" type="text"/>
+      </div>
+      <div class="upload-stuff">
+        <button class="btn-login" type="submit">Add City</button>
+      </div>
+    </form>
+  </div>
+
+</div>

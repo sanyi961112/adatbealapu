@@ -1,5 +1,5 @@
 <div class="navbar" id="header" role="heading">
-  <div class="title">
+  <div>
     <div id="title" routerLink="/main" alt="Photoz">
       Photoz
     </div>
@@ -9,8 +9,7 @@
   <div class="buttons">
     <div class="username" *ngIf="isLoggedIn"> Welcome, {{currentUser}}</div>
     <button *ngIf="!isLoggedIn" class="btn-login" routerLink="/login">Login</button>
-    <button *ngIf="isLoggedIn" class="btn-login" routerLink="/photo">My photos</button>
-    <button *ngIf="isLoggedIn" class="btn-login" routerLink="/albums">My albums</button>
+    <button *ngIf="isLoggedIn" class="btn-login" (click)="toMyPhotos()">My photos</button>
     <button *ngIf="isLoggedIn" class="btn-login" (click)="toMyProfile()">Profile</button>
     <button *ngIf="isLoggedIn" class="btn-login" routerLink="/logout" (click)="logOut()">Logout</button>
   </div>

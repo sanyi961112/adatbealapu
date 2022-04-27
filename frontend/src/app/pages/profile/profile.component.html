@@ -30,6 +30,17 @@
     <button class="btn-login btn-nav" type="submit">Update My Profile</button>
   </div>
   <div class="photos-of-user">
+    Photos of {{currentUsername}}
+    <div *ngIf="!photoList.length">
+      No photos yet.
+    </div>
+<!--    <div *ngFor="let photo of photoList">-->
+<!--      {{photo.title}}-->
+<!--    </div>-->
+  </div>
+  <div class="add-photos">
+    <form>
 
+    </form>
   </div>
 </div>

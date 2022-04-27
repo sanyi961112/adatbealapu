@@ -10,6 +10,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { PhotosComponent } from './pages/photos/photos.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     MainComponent,
     NavbarComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    PhotosComponent
   ],
   imports: [
     BrowserModule,

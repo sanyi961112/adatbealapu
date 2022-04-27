@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {MainComponent} from './pages/main/main.component';
 import {LoginComponent} from './pages/login/login.component';
 import {ProfileComponent} from './pages/profile/profile.component';
+import {PhotosComponent} from "./pages/photos/photos.component";
 
 const routes: Routes = [
   {
@@ -17,6 +18,11 @@ const routes: Routes = [
     path: 'profile/:username',
     component: ProfileComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'photos/:username',
+    component: PhotosComponent,
+    // pathMatch: 'full'
   },
   { path: '**', redirectTo: 'main' }
 ];

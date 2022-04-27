@@ -35,4 +35,7 @@ export class NavbarComponent implements OnInit {
   toMyProfile() {
     this.router.navigate(['/profile', this.currentUser]).then();
   }
+  toMyPhotos() {
+    this.router.navigate(['/photos', this.currentUser]).then();
+  }
 }

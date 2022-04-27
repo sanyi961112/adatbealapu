@@ -11,6 +11,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class ProfileComponent implements OnInit {
   isLoginUserProfile: boolean = false;
   currentUser: string = '';
+  photoList: any;
   currentProfile: any;
   currentUsername: string = '';
   currentFull: string = '';
@@ -27,6 +28,7 @@ export class ProfileComponent implements OnInit {
   constructor(private rest: RestService) { }
 
   ngOnInit(): void {
+    this.updateForm.reset();
     this.currentUser = JSON.stringify(localStorage.getItem('currentUser'));
     this.currentUser = this.currentUser.replace('"','');
     this.currentUser = this.currentUser.replace('"','');
@@ -37,14 +39,18 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserProfile() {
-   this.rest.getProfile(this.currentUser).subscribe(response => {
-     this.currentProfile = response;
+   this.rest.getProfile(this.currentUser).subscribe(res => {
+     this.currentProfile = res;
      console.log(JSON.stringify(this.currentProfile));
      this.currentUsername = this.currentProfile[0]['USERNAME'];
      this.currentFull = this.currentProfile[0]['FULL_NAME'];
      this.currentMail = this.currentProfile[0]['EMAIL'];
      this.currentLocation = this.currentProfile[0]['LOCATION'];
    });
+   this.rest.getPhotos(this.currentUsername).subscribe(res => {
+     this.photoList = res;
+     // this.photoList = JSON.stringify(this.photoList);
+   })
   }
 
   updateMyProfile(){
