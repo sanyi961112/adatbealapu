@@ -54,16 +54,28 @@
   <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
     <form [formGroup]="newCityForm" (submit)="addNewCity()">
       <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
-      <div class="upload-stuff">
+      <div class="upload-stuff" style="justify-content: center">
         <label>city name:</label>
         <input formControlName="name" type="text"/>
       </div>
-      <div class="upload-stuff">
+      <div class="upload-stuff" style="justify-content: center">
         <label>country name:</label>
         <input formControlName="country" type="text"/>
       </div>
       <div class="upload-stuff">
-        <button class="btn-login" type="submit">Add City</button>
+        <button class="btn-login btn-nav" type="submit">Add City</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
+    <form [formGroup]="newCategoryForm" (submit)="addNewCategory()">
+      <div class="upload-stuff" style="text-align: center">Feel free to add a new category for Photos</div>
+      <div class="upload-stuff" style="justify-content: center">
+        <label>category name:</label>
+        <input formControlName="category" type="text"/>
+      </div>
+      <div class="upload-stuff">
+        <button class="btn-login btn-nav" type="submit">Add Category</button>
       </div>
     </form>
   </div>

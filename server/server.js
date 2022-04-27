@@ -2,13 +2,15 @@ const express = require('express')
 const oracledb = require('oracledb');
 const sha256 = require('js-sha256');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+const {base64ToBlob} = require("base64-blob");
 const app = express();
 const port = 3000;
 const password = '1234';
 let connection;
+
 app.use(cors());
 app.use(express.json({limit: '100mb'}));
+
 app.post('/register', registerUser);
 /* register user with taken username check */
 async function registerUser(req, res) {
@@ -97,8 +99,7 @@ async function savePhoto(req, res) {
     let result;
     try {
         const newPhoto = req.body;
-        console.log(dataURItoBlob(newPhoto.image));
-        console.log("saving a photo");
+        console.log(newPhoto.image);
         const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
@@ -106,9 +107,9 @@ async function savePhoto(req, res) {
         });
         result = await connection.execute(
             `INSERT INTO "SZABO"."PHOTO"(ID_PHOTO, TITLE, DESCRIPTION, UPLOADDATE, OWNER, IMAGE, CURRENTRATING, CATEGORIES, LOCATION)
-             VALUES (:id_photo, :title, :description, :uploadDate, :owner, :image, :currentRating, :categories,
-                     :location)`,
-            [newPhoto.id_photo, newPhoto.title, newPhoto.description, newPhoto.uploadDate, newPhoto.owner, newPhoto.image, newPhoto.currentRating, newPhoto.categories, newPhoto.location]);
+             VALUES (:id_photo, :title, :description, :uploadDate, :owner, :image, :currentRating, :categories, :location)`,
+            [newPhoto.id_photo, newPhoto.title, newPhoto.description, newPhoto.uploadDate, newPhoto.owner, newPhoto.image,
+                newPhoto.currentRating, newPhoto.categories, newPhoto.location]);
         await connection.commit();
         res.status(201).json({
             message: "photo saved"
@@ -130,9 +131,6 @@ async function savePhoto(req, res) {
 app.get('/photos', getPhotos);
 /*gets all user photos to profile page*/
 async function getPhotos(req, res) {
-    oracledb.fetchAsString = [
-        oracledb.DATE
-    ];
     let result;
     try {
         console.log('trying to get photos');
@@ -265,19 +263,71 @@ async function getCities(req, res) {
     }
 }
 
-
-function dataURItoBlob(dataURI) {
-    var byteString = atob(dataURI.split(',')[1]);
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+app.post('/city', addCity);
+/*adds a new city to cities*/
+async function addCity(req, res) {
+    let result;
+    try {
+        const newCity = req.body;
+        console.log('adding a new city');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `INSERT INTO "SZABO"."CITIES" (ID_CITY, NAME, ASCII_NAME, COUNTRY_NAME)
+             VALUES (:id_city, :name, :ascii_name, :country_name)`,
+            [newCity.id_city, newCity.name, newCity.ascii_name, newCity.country_name]);
+        await connection.commit();
+        res.status(201).json({
+            message: "city added"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
     }
-    var blob = new Blob([ab], {type: mimeString});
-    return blob;
 }
-
-
+app.post('/category', addCategory);
+/*adds a new city to cities*/
+async function addCategory(req, res) {
+    let result;
+    try {
+        const newCategory = req.body;
+        console.log('adding a new category');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `INSERT INTO "SZABO"."CATEGORIES" (CATEGORY_NAME)
+             VALUES (:category_name)`,
+            [newCategory.category_name]);
+        await connection.commit();
+        res.status(201).json({
+            message: "category added"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
 
 app.listen(port, () => console.log("app listening on port %s", port));

@@ -33,6 +33,11 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/city', city).toPromise();
     return(message);
   }
+  async addCategory(category: any): Promise<any>{
+    console.log('adding a new category');
+    const message = await this.http.post('http://localhost:3000/category', category).toPromise();
+    return(message);
+  }
   getProfile(username: string): Observable<any>{
     console.log('get profile');
     const url = 'http://localhost:3000/profile/';

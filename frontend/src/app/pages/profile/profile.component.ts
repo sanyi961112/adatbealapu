@@ -9,8 +9,8 @@ import {FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  isLoginUserProfile: boolean = false;
   currentUser: string = '';
+  isLoginUserProfile: boolean = false;
   photoList: any;
   currentProfile: any;
   currentUsername: string = '';
@@ -25,6 +25,9 @@ export class ProfileComponent implements OnInit {
     password2: new FormControl([]),
     location: new FormControl([])
     });
+  user: any;
+  link: any;
+
   constructor(private rest: RestService) { }
 
   ngOnInit(): void {
@@ -34,8 +37,15 @@ export class ProfileComponent implements OnInit {
     this.currentUser = this.currentUser.replace('"','');
     if (window.location.href.includes(this.currentUser)){
       this.isLoginUserProfile = true;
+      this.user = this.currentUser;
+      this.getUserProfile();
+    } else {
+      this.isLoginUserProfile = false;
+      this.link = window.location.href;
+      this.user = this.link.split("/", 5);
+      this.user = this.user[4];
+      this.getUserProfile();
     }
-    this.getUserProfile();
   }
 
   getUserProfile() {
