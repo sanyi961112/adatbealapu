@@ -110,7 +110,7 @@ button{
 
 .upload-container{
   margin-top: 1em;
-  width: 70%;
+  width: 85%;
   min-height: 70vh;
   background-color: whitesmoke;
   margin-left: auto;
@@ -161,7 +161,31 @@ album-container{
 }
 
 .photos-of-user {
-  /*max-width: 10em;*/
   margin-left: auto;
   margin-right: auto;
+}
+
+.viewer {
+  max-width: 200px;
+}
+
+.photo-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.photo{
+  font-family: Arial;
+  color: black;
+  background-color: white;
+  border-radius: 1em;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
 }

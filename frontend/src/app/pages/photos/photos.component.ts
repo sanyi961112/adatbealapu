@@ -9,13 +9,13 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./photos.component.css']
 })
 export class PhotosComponent implements OnInit {
-  currentUser: string = '';
   isLoginUserPhotos: boolean = false;
+  isLoggedIn: boolean = false;
+  currentUser: string = '';
   newId: string = '';
   photos: any;
   categories: any;
   cities: any;
-  blob: any;
   newPhotoForm = new FormGroup({
     title: new FormControl([Validators.required, Validators.minLength(3)]),
     description: new FormControl([Validators.minLength(3)]),
@@ -36,6 +36,7 @@ export class PhotosComponent implements OnInit {
   newCityName: string = '';
   countryName: string = '';
   newCategory: string = '';
+  photoCount: number = 0;
 
 
   constructor(private rest: RestService, private toastr: ToastrService) {
@@ -46,6 +47,7 @@ export class PhotosComponent implements OnInit {
     this.newCityForm.reset();
     this.newCategoryForm.reset();
     this.currentUser = JSON.stringify(localStorage.getItem('currentUser'));
+    this.isLoggedIn = Boolean(JSON.stringify(localStorage.getItem('isLoggedIn')));
     this.currentUser = this.currentUser.replace('"', '');
     this.currentUser = this.currentUser.replace('"', '');
     if (window.location.href.includes(this.currentUser)) {
@@ -83,15 +85,18 @@ export class PhotosComponent implements OnInit {
         description: this.newPhotoForm.controls['description'].value,
         uploadDate: this.getDate(),
         owner: this.currentUser,
-        image: this.blob,
+        image: this.imageFile,
         currentRating: 0,
         categories: this.newPhotoForm.controls['category'].value,
         location: this.newPhotoForm.controls['location'].value
       }
-      //TODO somehow save image
       console.log(photo);
       this.rest.savePhoto(photo);
       this.newPhotoForm.reset();
+      this.rest.getPhotos(this.user).subscribe(res => {
+        this.photos = res;
+        this.photoCount = this.photos.length;
+      });
       this.toastr.success('Successfully uploaded photo', 'Success');
     } catch (e) {
       this.toastr.error('' + e, 'Error');
@@ -133,36 +138,34 @@ export class PhotosComponent implements OnInit {
         this.toastr.info('please fill the field', 'Notice');
         return;
       }
-      console.log('hello');
       this.newId = this.generatePhotoId();
       const category = {
         category_name: this.newCategoryForm.controls['category'].value
       }
       this.rest.addCategory(category);
       this.newCategoryForm.reset();
+      this.rest.getCategories().subscribe(res => {
+        this.categories = res;
+      });
       this.toastr.success('Successfully added a new category', 'Success');
     } catch (e) {
       this.toastr.error('' + e, 'Error');
     }
   }
 
-  getDate(): string {
+  getDate(): Date {
     const dateObj = new Date();
-    const month = dateObj.getUTCMonth() + 1;
-    const day = dateObj.getUTCDate();
-    const year = dateObj.getUTCFullYear();
-    const date = year + "/" + month + "/" + day;
-    return date;
+    return dateObj;
   }
 
   generatePhotoId(): string {
     return Math.random().toString(16).slice(2);
   }
 
-  getUserPhotos() {
+  async getUserPhotos() {
     this.rest.getPhotos(this.user).subscribe(res => {
       this.photos = res;
-      console.log(JSON.stringify(this.photos));
+      this.photoCount = this.photos.length;
     });
   }
 
@@ -178,32 +181,24 @@ export class PhotosComponent implements OnInit {
     });
   }
 
+  removePhoto(photoId: string): void {
+    try{
+      const id = {
+        idPhoto: photoId};
+      this.rest.removePhoto(id);
+      this.toastr.success('Successfully deleted photo', 'Success');
+      this.getUserPhotos();
+    } catch (e) {
+      this.toastr.error('' + e, 'Error');
+    }
+  }
+
   handleUpload(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imageFile = reader.result;
-      this.blob = this.dataURLtoBlob(reader.result);
     };
-  }
-
-  dataURLtoBlob(dataURL: any) {
-    var BASE64_MARKER = ';base64,';
-    if (dataURL.indexOf(BASE64_MARKER) == -1) {
-      var parts = dataURL.split(',');
-      var contentType = parts[0].split(':')[1];
-      var raw = decodeURIComponent(parts[1]);
-      return new Blob([raw], {type: contentType});
-    }
-    var parts = dataURL.split(BASE64_MARKER);
-    var contentType = parts[0].split(':')[1];
-    var raw = window.atob(parts[1]);
-    var rawLength = raw.length;
-    var uInt8Array = new Uint8Array(rawLength);
-    for (var i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
-    }
-    return new Blob([uInt8Array], {type: contentType});
   }
 }

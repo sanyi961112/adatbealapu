@@ -7,18 +7,6 @@
     <div class="title" *ngIf="!isLoginUserPhotos">
       <h1>Photos of {{user}} </h1>
     </div>
-    <div class="photo-container">
-      All photos
-      <div *ngFor="let photo of photos" class="photos-of-user">
-        {{photo.name}}
-      </div>
-    </div>
-    <div class="album-container">
-      Add new album
-    </div>
-    <div class="album-container">
-      All albums
-    </div>
   </div>
   <form [formGroup]="newPhotoForm" (submit)="addNewPhoto()">
     <div class="upload" *ngIf="isLoginUserPhotos">
@@ -51,33 +39,56 @@
       <button class="btn-login btn-nav" type="submit">Save Photo</button>
     </div>
   </form>
-  <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
-    <form [formGroup]="newCityForm" (submit)="addNewCity()">
-      <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
-      <div class="upload-stuff" style="justify-content: center">
-        <label>city name:</label>
-        <input formControlName="name" type="text"/>
-      </div>
-      <div class="upload-stuff" style="justify-content: center">
-        <label>country name:</label>
-        <input formControlName="country" type="text"/>
-      </div>
-      <div class="upload-stuff">
-        <button class="btn-login btn-nav" type="submit">Add City</button>
-      </div>
-    </form>
+  <div class="upload-stuff">
+    <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
+      <form [formGroup]="newCityForm" (submit)="addNewCity()">
+        <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
+        <div class="upload-stuff" style="justify-content: center">
+          <label>city name:</label>
+          <input formControlName="name" type="text"/>
+        </div>
+        <div class="upload-stuff" style="justify-content: center">
+          <label>country name:</label>
+          <input formControlName="country" type="text"/>
+        </div>
+        <div class="upload-stuff">
+          <button class="btn-login btn-nav" type="submit">Add City</button>
+        </div>
+      </form>
+    </div>
+    <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
+      <form [formGroup]="newCategoryForm" (submit)="addNewCategory()">
+        <div class="upload-stuff" style="text-align: center">Feel free to add a new category for Photos</div>
+        <div class="upload-stuff" style="justify-content: center">
+          <label>category name:</label>
+          <input formControlName="category" type="text" [maxlength]="60"/>
+        </div>
+        <div class="upload-stuff">
+          <button class="btn-login btn-nav" type="submit">Add Category</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
-    <form [formGroup]="newCategoryForm" (submit)="addNewCategory()">
-      <div class="upload-stuff" style="text-align: center">Feel free to add a new category for Photos</div>
-      <div class="upload-stuff" style="justify-content: center">
-        <label>category name:</label>
-        <input formControlName="category" type="text"/>
+  <h1 class="title">All photos ({{photoCount}})</h1>
+  <div class="photo-container">
+    <div *ngFor="let photo of photos" class="photos-of-user">
+      <div class="photo">
+        <label>Title: {{photo[1]}}</label>
+        <div style="margin-left: auto; margin-right: auto">
+          <img class="viewer" src="{{photo[5]}}" [longDesc]="photo[1]" />
+        </div>
+        <label>Description: {{photo[2]}}</label>
+        <label>Rating: {{photo[6]}}</label>
+        <label>Upload date: {{photo[3]}}</label>
+        <label>Category: {{photo[7]}}</label>
+        <Button *ngIf="isLoginUserPhotos" (click)="removePhoto(photo[0])">Remove Photo</Button>
       </div>
-      <div class="upload-stuff">
-        <button class="btn-login btn-nav" type="submit">Add Category</button>
-      </div>
-    </form>
+    </div>
   </div>
-
+  <div class="album-container">
+    Add new album
+  </div>
+  <div class="album-container">
+    All albums
+  </div>
 </div>

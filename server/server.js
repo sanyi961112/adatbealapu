@@ -99,7 +99,8 @@ async function savePhoto(req, res) {
     let result;
     try {
         const newPhoto = req.body;
-        console.log(newPhoto.image);
+        newPhoto.image = newPhoto.image.toString();
+        const date = new Date(newPhoto.uploadDate);
         const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
@@ -108,7 +109,7 @@ async function savePhoto(req, res) {
         result = await connection.execute(
             `INSERT INTO "SZABO"."PHOTO"(ID_PHOTO, TITLE, DESCRIPTION, UPLOADDATE, OWNER, IMAGE, CURRENTRATING, CATEGORIES, LOCATION)
              VALUES (:id_photo, :title, :description, :uploadDate, :owner, :image, :currentRating, :categories, :location)`,
-            [newPhoto.id_photo, newPhoto.title, newPhoto.description, newPhoto.uploadDate, newPhoto.owner, newPhoto.image,
+            [newPhoto.id_photo, newPhoto.title, newPhoto.description, date, newPhoto.owner, newPhoto.image,
                 newPhoto.currentRating, newPhoto.categories, newPhoto.location]);
         await connection.commit();
         res.status(201).json({
@@ -132,6 +133,7 @@ app.get('/photos', getPhotos);
 /*gets all user photos to profile page*/
 async function getPhotos(req, res) {
     let result;
+    oracledb.fetchAsString = [ oracledb.CLOB ];
     try {
         console.log('trying to get photos');
         const connection = await oracledb.getConnection({
@@ -142,9 +144,8 @@ async function getPhotos(req, res) {
         result = await connection.execute(
             `SELECT *
              FROM "SZABO"."PHOTO"
-             WHERE OWNER = :owner`,
+             WHERE OWNER = :owner ORDER BY UPLOADDATE DESC`,
             [req.query.owner]);
-        console.log(result.rows);
         console.log('photos reached');
         res.status(201).json(result.rows);
     } catch (err) {
@@ -220,6 +221,7 @@ async function getCategories(req, res) {
         result = await connection.execute(
             `SELECT * FROM "SZABO"."CATEGORIES"`);
         console.log('categories reached');
+        console.log(result.rows);
         res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)
@@ -315,6 +317,38 @@ async function addCategory(req, res) {
         await connection.commit();
         res.status(201).json({
             message: "category added"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.post('/removePhoto', removePhoto);
+/*adds a new city to cities*/
+async function removePhoto(req, res) {
+    let result;
+    try {
+        let photo = req.body;
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `DELETE FROM "SZABO"."PHOTO" WHERE ID_PHOTO=:id`,
+            [photo.idPhoto]);
+        await connection.commit();
+        res.status(201).json({
+            message: "photo deleted successfully"
         });
     } catch (err) {
         console.log(err.message)
