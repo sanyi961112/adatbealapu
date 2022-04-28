@@ -9,7 +9,7 @@
     </div>
   </div>
   <form [formGroup]="newPhotoForm" (submit)="addNewPhoto()">
-    <div class="upload" *ngIf="isLoginUserPhotos">
+    <div class="upload" *ngIf="isLoginUserPhotos && isLoggedIn">
       <div class="add-photo">
         <div class="upload-stuff">
           <label for="file">Add a New photo:</label>
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="upload-stuff" *ngIf="isLoginUserPhotos">
+    <div class="upload-stuff" *ngIf="isLoginUserPhotos && isLoggedIn">
       <div class="upload-inputs"><label>Title</label><input type="text" formControlName="title"/></div>
       <div class="upload-inputs"><label>Description</label><input type="text" formControlName="description"/></div>
       <div class="upload-inputs"><label>Categories</label>

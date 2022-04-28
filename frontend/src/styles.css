@@ -1,4 +1,5 @@
 body{
+  background-color: #cbdffc;
   margin: 0;
   padding: 0;
 }
@@ -20,7 +21,7 @@ button{
 .navbar{
   display: flex;
   flex-direction: row;
-  background-color: #add0ff;
+  background-color: #9ec6fc;
   height: 4em;
 }
 .padding{
@@ -30,7 +31,7 @@ button{
 .login-container{
   display: flex;
   flex-direction: row;
-  background-color: #b0e4ff;
+  color: white;
   width: 95vw;
   margin: 2em auto auto auto;
   height: 50%;
@@ -38,7 +39,10 @@ button{
   border-radius: 1em;
 }
 .login-div {
+  border-radius: 1em;
+  background-color: #607a6e;
   width: 50%;
+  margin: 1em;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;

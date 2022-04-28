@@ -9,13 +9,6 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./photos.component.css']
 })
 export class PhotosComponent implements OnInit {
-  isLoginUserPhotos: boolean = false;
-  isLoggedIn: boolean = false;
-  currentUser: string = '';
-  newId: string = '';
-  photos: any;
-  categories: any;
-  cities: any;
   newPhotoForm = new FormGroup({
     title: new FormControl([Validators.required, Validators.minLength(3)]),
     description: new FormControl([Validators.minLength(3)]),
@@ -30,6 +23,14 @@ export class PhotosComponent implements OnInit {
   newCategoryForm = new FormGroup({
     category: new FormControl([Validators.required, Validators.minLength(3)]),
   });
+
+  isLoginUserPhotos: boolean = false;
+  isLoggedIn: any;
+  currentUser: string = '';
+  newId: string = '';
+  photos: any;
+  categories: any;
+  cities: any;
   user: any;
   link: any;
   imageFile: string | ArrayBuffer | null = '';
@@ -46,21 +47,37 @@ export class PhotosComponent implements OnInit {
     this.newPhotoForm.reset();
     this.newCityForm.reset();
     this.newCategoryForm.reset();
+
     this.currentUser = JSON.stringify(localStorage.getItem('currentUser'));
-    this.isLoggedIn = Boolean(JSON.stringify(localStorage.getItem('isLoggedIn')));
     this.currentUser = this.currentUser.replace('"', '');
     this.currentUser = this.currentUser.replace('"', '');
-    if (window.location.href.includes(this.currentUser)) {
+    this.isLoggedIn = (localStorage.getItem('isLoggedIn'));
+    this.link = window.location.href;
+    this.user = this.link.split("/", 5);
+    this.user = this.user[4];
+
+    if(this.isLoggedIn === 'true'){
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
+    if (this.isLoggedIn && this.user === this.currentUser) {
       this.isLoginUserPhotos = true;
-      this.user = this.currentUser;
+    }
+    if (this.user === this.currentUser){
+      this.isLoginUserPhotos = true;
+    }
+
+    console.log("current link: " + this.user);
+    console.log("currentUser logged in: " + this.currentUser);
+    console.log("is anyone logged in?: " + this.isLoggedIn);
+    console.log("is logged in user same as link?: " + this.isLoginUserPhotos);
+    if (this.isLoginUserPhotos) {
+      this.isLoginUserPhotos = true;
       this.getUserPhotos();
       this.getCategories();
       this.getCities();
     } else {
-      this.isLoginUserPhotos = false;
-      this.link = window.location.href;
-      this.user = this.link.split("/", 5);
-      this.user = this.user[4];
       this.getUserPhotos();
     }
   }

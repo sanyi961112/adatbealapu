@@ -1,5 +1,8 @@
 <div class="login-container">
   <div class="login-div">
+    <div class="btn-container">
+      <button class="btn-login btn-nav" routerLink="main">Back to main page</button>
+    </div>
     <form [formGroup]="loginForm" (submit)="loginUser()">
       <h1 style="text-align: center; font-family: Arial">Login</h1>
       <div class="format">
@@ -11,9 +14,6 @@
         </div>
         <div class="btn-container">
           <button [disabled]="loginForm.invalid" class="btn-login" type="submit">Login</button>
-        </div>
-        <div class="btn-container">
-          <button class="btn-login btn-nav" routerLink="main">Back to main page</button>
         </div>
       </div>
     </form>
