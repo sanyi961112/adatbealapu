@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
         location: "",
       }
       this.message = await this.rest.registerUser(newUser);
-      console.log(this.message);
+      // console.log(this.message);
       if(this.message['message'] === 'user taken'){
         this.toastr.info('This Username is already taken, choose another one!', 'Notice');
         return;

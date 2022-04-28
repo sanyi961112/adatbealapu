@@ -68,10 +68,6 @@ export class PhotosComponent implements OnInit {
       this.isLoginUserPhotos = true;
     }
 
-    console.log("current link: " + this.user);
-    console.log("currentUser logged in: " + this.currentUser);
-    console.log("is anyone logged in?: " + this.isLoggedIn);
-    console.log("is logged in user same as link?: " + this.isLoginUserPhotos);
     if (this.isLoginUserPhotos) {
       this.isLoginUserPhotos = true;
       this.getUserPhotos();

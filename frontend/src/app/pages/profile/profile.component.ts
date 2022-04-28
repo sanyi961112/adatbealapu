@@ -10,6 +10,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class ProfileComponent implements OnInit {
   currentUser: string = '';
+  isLoggedIn: any;
   isLoginUserProfile: boolean = false;
   photoList: any;
   currentProfile: any;
@@ -32,24 +33,38 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateForm.reset();
+
     this.currentUser = JSON.stringify(localStorage.getItem('currentUser'));
     this.currentUser = this.currentUser.replace('"','');
     this.currentUser = this.currentUser.replace('"','');
-    if (window.location.href.includes(this.currentUser)){
+    this.isLoggedIn = (localStorage.getItem('isLoggedIn'));
+    this.link = window.location.href;
+    this.user = this.link.split("/", 5);
+    this.user = this.user[4];
+
+    if(this.isLoggedIn === 'true'){
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
+    if (this.isLoggedIn && this.user === this.currentUser) {
       this.isLoginUserProfile = true;
+    }
+    if (this.user === this.currentUser){
+      this.isLoginUserProfile = true;
+    }
+
+    if (this.isLoginUserProfile){
       this.user = this.currentUser;
       this.getUserProfile();
     } else {
       this.isLoginUserProfile = false;
-      this.link = window.location.href;
-      this.user = this.link.split("/", 5);
-      this.user = this.user[4];
       this.getUserProfile();
     }
   }
 
   getUserProfile() {
-   this.rest.getProfile(this.currentUser).subscribe(res => {
+   this.rest.getProfile(this.user).subscribe(res => {
      this.currentProfile = res;
      console.log(JSON.stringify(this.currentProfile));
      this.currentUsername = this.currentProfile[0]['USERNAME'];

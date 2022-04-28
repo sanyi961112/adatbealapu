@@ -4,6 +4,7 @@ body{
   padding: 0;
 }
 input{
+  width: 100%;
   outline: none;
 }
 button{
@@ -132,8 +133,8 @@ button{
 .add-photo{
   display: flex;
   flex-direction: row;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
+  /*margin-right: auto;*/
   justify-content: space-evenly;
 }
 .title {
@@ -192,4 +193,6 @@ album-container{
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }

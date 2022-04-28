@@ -24,7 +24,7 @@
       <div class="upload-inputs"><label>Description</label><input type="text" formControlName="description"/></div>
       <div class="upload-inputs"><label>Categories</label>
         <select formControlName="category">
-          <option>None</option>
+          <option disabled>None</option>
           <option *ngFor="let category of categories">{{category}}</option>
         </select>
       </div>
