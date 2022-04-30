@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {RestService} from "../../services/rest.service";
 import {ToastrService} from "ngx-toastr";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-photos',
@@ -40,7 +41,7 @@ export class PhotosComponent implements OnInit {
   newCategory: string = '';
   photoCount: number = 0;
 
-  constructor(private rest: RestService, private toastr: ToastrService) {
+  constructor(private rest: RestService, private toastr: ToastrService,private router: Router) {
   }
 
   ngOnInit(): void {
@@ -207,12 +208,16 @@ export class PhotosComponent implements OnInit {
     }
   }
 
-  handleUpload(event: any) {
+  uploadPhoto(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       this.imageFile = reader.result;
     };
+  }
+
+  rateThisPhoto(photoId: string) {
+    this.router.navigate(['/photo', photoId]).then();
   }
 }

@@ -93,6 +93,40 @@ async function getUserProfile(req, res) {
     }
 }
 
+app.get('/getSomeUsers', getSomeUsers);
+/*gets some users by username*/
+async function getSomeUsers(req, res) {
+    let result;
+    try {
+        console.log('searching some users');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT USERNAME
+             FROM "SZABO"."USRS"
+             WHERE USERNAME LIKE :username || '%' AND rownum <= 10
+             ORDER BY USERNAME ASC`,
+            [req.query.user], {outFormat: oracledb.OUT_FORMAT_OBJECT});
+        console.log('Got some user profiles!');
+        console.log(result.rows);
+        res.status(201).json(result.rows);
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
 app.post('/photo', savePhoto);
 /*saves a single photo to db*/
 async function savePhoto(req, res) {
@@ -115,6 +149,39 @@ async function savePhoto(req, res) {
         res.status(201).json({
             message: "photo saved"
         });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.get('/photo', getPhoto);
+/*gets a photo by id*/
+async function getPhoto(req, res) {
+    let result;
+    oracledb.fetchAsString = [ oracledb.CLOB ];
+    try {
+        console.log('trying to get photo by id');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT *
+             FROM "SZABO"."PHOTO"
+             WHERE ID_PHOTO = :owner`,
+            [req.query.photoId]);
+        console.log('photo reached');
+        res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)
         return res.send(err.message);
@@ -168,7 +235,7 @@ async function getLatestPhotos(req, res) {
     let result;
     oracledb.fetchAsString = [ oracledb.CLOB ];
     try {
-        console.log('trying to get photos');
+        console.log('trying to get latest photos');
         const connection = await oracledb.getConnection({
             user: "SZABO",
             password: password,
@@ -285,7 +352,7 @@ async function getCities(req, res) {
             connectString: "localhost:1521/xe"
         });
         result = await connection.execute(
-            `SELECT NAME FROM "SZABO"."CITIES" WHERE COUNTRY_NAME='Hungary'`);
+            `SELECT NAME FROM "SZABO"."CITIES" WHERE COUNTRY_NAME LIKE 'Hungary' `);
         res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)

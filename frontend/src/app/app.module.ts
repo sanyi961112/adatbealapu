@@ -11,6 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { ToastrModule } from 'ngx-toastr';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { PhotosComponent } from './pages/photos/photos.component';
+import { PhotoComponent } from './pages/photo/photo.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PhotosComponent } from './pages/photos/photos.component';
     NavbarComponent,
     LoginComponent,
     ProfileComponent,
-    PhotosComponent
+    PhotosComponent,
+    PhotoComponent
   ],
   imports: [
     BrowserModule,

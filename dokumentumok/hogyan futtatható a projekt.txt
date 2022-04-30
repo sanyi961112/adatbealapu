@@ -2,15 +2,16 @@ Webstormban indítható a frontend és a backend is.
 
 Dockerben pedig a truevoly/oracle-12c imageből egy új instance-t futtatni (kell idő míg lebuildel)
 
-Frontend: Angular projekt Angular CLI server futtatásával.
+Frontend: (npm install kiadása után) Angular projekt Angular CLI server futtatásával.
 
-Backend: nodejs server.js vagy új node.js config-gal (add config, nodejs app és Javascript file: 'server.js').
+Backend: (npm install kiadása után) nodejs server.js vagy új node.js config-gal 
+(add config, nodejs app a lenyíló menüben, server js mappájának kijelölése és Javascript file: 'server.js').
 
 Telepíteni az Oracle Instant Client 21 lightpack változatot, majd környezeti változóként hozzáadni
 
 Adatbázisban(SQL developerben): (Bodnár Péter videója alapján)
 - csatlakozás user/password: system/oracle
 - új user hozzáadása: SZABO/1234 (ezt használja a szerver hogy csatlakozzon) és belépés után
-- adatbázis script photoalbumok szabo.sql script futtatása
+- adatbázist létrehozó script: script_szabo.sql futtatása
 
 Ezután frontenden(localhost:4200) lehet regisztrálni/loginolni.

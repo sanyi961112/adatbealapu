@@ -6,7 +6,17 @@
   </div>
   <div class="padding">
   </div>
-  <div class="buttons"><input type="search" placeholder="Search for users" class="search-field"/></div>
+
+  <div class="buttons" style="flex-direction: row;">
+    <form [formGroup]="searchGroup" style="display: flex; flex-direction: row; margin-top: auto; margin-bottom: auto">
+      <input formControlName="searchValue" (ngModelChange)="getSomeUsers()" list="searchValue"
+             placeholder="Search for users" class="search-field">
+      <datalist id="searchValue">
+        <option *ngFor="let user of users" value="{{user.USERNAME}}">{{user.USERNAME}}</option>
+      </datalist>
+      <button class="btn-login btn-nav" (click)="toPhotos()">To photos</button>
+    </form>
+  </div>
   <div class="buttons">
     <div class="username" *ngIf="isLoggedIn"> Welcome, {{currentUser}}</div>
     <button *ngIf="!isLoggedIn" class="btn-login" routerLink="/login">Login</button>

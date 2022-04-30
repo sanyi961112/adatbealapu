@@ -212,15 +212,28 @@ album-container{
   margin-left: auto;
   margin-right: auto;
   background-color: whitesmoke;
-  max-height: 12em;
+  max-height: 15em;
   width: 97vw;
 }
 .photo-main{
+  margin-top: 2em;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(255,255,255,0.5);
+  width: 95%;
+  padding: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
 
+.viewermain {
+  max-height: 150px;
 }
 
 .viewer-main{
-  max-height: 100px;
+  object-fit: contain;
+  max-height: 700px;
 }
 
 .search-field {
@@ -228,3 +241,5 @@ album-container{
   height: 30px;
   border-radius: 4px;
 }
+
+

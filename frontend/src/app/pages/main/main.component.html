@@ -4,10 +4,10 @@
     <div style="text-align: left"><h1 class="title">My latest photos</h1></div>
     <div class="photo-reel">
       <div *ngFor="let photo of photos" class="photos-of-user">
-        <div class="photo-main">
+        <div class="photomain">
           <label>{{photo[1]}}</label>
           <div style="margin-left: auto; margin-right: auto">
-            <img class="viewer-main" src="{{photo[5]}}" [longDesc]="photo[1]"/>
+            <img class="viewermain" src="{{photo[5]}}" [longDesc]="photo[1]"/>
           </div>
           <div>Current Rating: {{photo[6]}}</div>
           <div>Category: {{photo[7]}}</div>

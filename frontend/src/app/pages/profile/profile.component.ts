@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit {
   async getUserProfile() {
    this.rest.getProfile(this.user).subscribe(res => {
      this.currentProfile = res;
-     console.log(JSON.stringify(this.currentProfile));
+     // console.log(JSON.stringify(this.currentProfile));
      this.currentUsername = this.currentProfile[0]['USERNAME'];
      this.currentFull = this.currentProfile[0]['FULL_NAME'];
      this.currentMail = this.currentProfile[0]['EMAIL'];

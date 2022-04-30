@@ -14,7 +14,7 @@
         <div class="add-photo" style="flex-direction: row">
           <div class="upload-inputs">
             <label>Upload New Photo</label>
-            <input type="file" id="file" accept="image/*" formControlName="image" (change)="handleUpload($event)"/>
+            <input type="file" id="file" accept="image/*" formControlName="image" (change)="uploadPhoto($event)"/>
           </div>
           <div class="upload-inputs" style="width: 50%">
             <img src="{{this.imageFile}}" class="preview"/>
@@ -83,13 +83,16 @@
       <div class="photo">
         <label>Title: {{photo[1]}}</label>
         <div style="margin-left: auto; margin-right: auto">
-          <img class="viewer" src="{{photo[5]}}" [longDesc]="photo[1]"/>
+          <img class="viewer" src="{{photo[5]}}" title="{{photo[1]}}"/>
         </div>
         <label>Description: {{photo[2]}}</label>
         <label>Rating: {{photo[6]}}</label>
         <label>Upload date: {{photo[3]}}</label>
         <label>Category: {{photo[7]}}</label>
         <Button *ngIf="isLoginUserPhotos" (click)="removePhoto(photo[0])">Remove Photo</Button>
+        <div *ngIf="!isLoginUserPhotos && isLoggedIn">
+          <button class="btn-login btn-nav" (click)="rateThisPhoto(photo[0])">Rate This Photo</button>
+        </div>
       </div>
     </div>
   </div>
