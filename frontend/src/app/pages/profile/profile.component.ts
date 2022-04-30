@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getUserProfile() {
+  async getUserProfile() {
    this.rest.getProfile(this.user).subscribe(res => {
      this.currentProfile = res;
      console.log(JSON.stringify(this.currentProfile));
@@ -72,9 +72,8 @@ export class ProfileComponent implements OnInit {
      this.currentMail = this.currentProfile[0]['EMAIL'];
      this.currentLocation = this.currentProfile[0]['LOCATION'];
    });
-   this.rest.getPhotos(this.currentUsername).subscribe(res => {
+   await this.rest.getPhotos(this.currentUsername).subscribe(res => {
      this.photoList = res;
-     // this.photoList = JSON.stringify(this.photoList);
    })
   }
 

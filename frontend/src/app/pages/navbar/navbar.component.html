@@ -1,11 +1,12 @@
 <div class="navbar" id="header" role="heading">
   <div>
-    <div id="title" routerLink="/main" alt="Photoz">
+    <div id="title" routerLink="/main" title="Back to Main page" alt="Photoz">
       Photoz
     </div>
   </div>
   <div class="padding">
   </div>
+  <div class="buttons"><input type="search" placeholder="Search for users" class="search-field"/></div>
   <div class="buttons">
     <div class="username" *ngIf="isLoggedIn"> Welcome, {{currentUser}}</div>
     <button *ngIf="!isLoggedIn" class="btn-login" routerLink="/login">Login</button>

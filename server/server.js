@@ -162,6 +162,41 @@ async function getPhotos(req, res) {
     }
 }
 
+app.get('/latest', getLatestPhotos);
+/*gets 5 latest photos to main page*/
+async function getLatestPhotos(req, res) {
+    let result;
+    oracledb.fetchAsString = [ oracledb.CLOB ];
+    try {
+        console.log('trying to get photos');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT *
+             FROM "SZABO"."PHOTO"
+             WHERE OWNER = :owner AND rownum <= 5 
+             ORDER BY UPLOADDATE DESC`,
+            [req.query.owner]);
+        console.log('getting latest photos');
+        res.status(201).json(result.rows);
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+
 app.post('/login', loginUser);
 /*logs in user if they are in the database*/
 async function loginUser(req, res) {
@@ -219,9 +254,8 @@ async function getCategories(req, res) {
             connectString: "localhost:1521/xe"
         });
         result = await connection.execute(
-            `SELECT * FROM "SZABO"."CATEGORIES"`);
+            `SELECT * FROM "SZABO"."CATEGORIES" ORDER BY CATEGORY_NAME ASC`);
         console.log('categories reached');
-        console.log(result.rows);
         res.status(201).json(result.rows);
     } catch (err) {
         console.log(err.message)
@@ -236,6 +270,8 @@ async function getCategories(req, res) {
         }
     }
 }
+
+
 app.get('/cities', getCities);
 /*returns all city names*/
 async function getCities(req, res) {
@@ -364,4 +400,4 @@ async function removePhoto(req, res) {
     }
 }
 
-app.listen(port, () => console.log("app listening on port %s", port));
+app.listen(port, () => console.log("App listening on port %s", port));

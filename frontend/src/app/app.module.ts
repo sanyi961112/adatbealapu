@@ -27,7 +27,9 @@ import { PhotosComponent } from './pages/photos/photos.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

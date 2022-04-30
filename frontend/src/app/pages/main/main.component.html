@@ -1,3 +1,19 @@
 <app-navbar></app-navbar>
-<div class="">
+<div class="my-latest-photos" *ngIf="isLoggedIn && isLoginUserPhotos">
+  <div class="photo-reel" (click)="toMyPhotos()" title="To My Photos" style="cursor: pointer; flex-direction: column">
+    <div style="text-align: left"><h1 class="title">My latest photos</h1></div>
+    <div class="photo-reel">
+      <div *ngFor="let photo of photos" class="photos-of-user">
+        <div class="photo-main">
+          <label>{{photo[1]}}</label>
+          <div style="margin-left: auto; margin-right: auto">
+            <img class="viewer-main" src="{{photo[5]}}" [longDesc]="photo[1]"/>
+          </div>
+          <div>Current Rating: {{photo[6]}}</div>
+          <div>Category: {{photo[7]}}</div>
+          <div>Location: {{photo[8]}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

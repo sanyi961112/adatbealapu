@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 <div class="upload-container">
-  <div class="upload">
+  <div class="">
     <div class="title" *ngIf="isLoginUserPhotos">
       <h1>My Photos</h1>
     </div>
@@ -8,65 +8,73 @@
       <h1>Photos of {{user}} </h1>
     </div>
   </div>
-  <form [formGroup]="newPhotoForm" (submit)="addNewPhoto()">
-    <div class="upload" *ngIf="isLoginUserPhotos && isLoggedIn">
-      <div class="add-photo">
-        <div class="upload-stuff">
-          <label for="file">Add a New photo:</label>
+  <div>
+    <form [formGroup]="newPhotoForm" (submit)="addNewPhoto()">
+      <div class="upload" *ngIf="isLoginUserPhotos && isLoggedIn">
+        <div class="add-photo" style="flex-direction: row">
+          <div class="upload-inputs">
+            <label>Upload New Photo</label>
+            <input type="file" id="file" accept="image/*" formControlName="image" (change)="handleUpload($event)"/>
+          </div>
+          <div class="upload-inputs" style="width: 50%">
+            <img src="{{this.imageFile}}" class="preview"/>
+          </div>
         </div>
-        <div class="upload-stuff">
-          <input type="file" id="file" accept="image/*" formControlName="image" (change)="handleUpload($event)"/>
+        <div class="add-photo">
+          <div class="upload-stuff" *ngIf="isLoginUserPhotos && isLoggedIn">
+            <div class="upload-inputs"><label>Title</label><input type="text" formControlName="title"/></div>
+            <div class="upload-inputs"><label>Description</label><input type="text" formControlName="description"/>
+            </div>
+            <div class="upload-inputs"><label>Categories</label>
+              <select formControlName="category">
+                <option *ngFor="let category of categories">{{category}}</option>
+              </select>
+            </div>
+            <div class="upload-inputs"><label>Location</label>
+              <input formControlName="location" list="searchCity">
+              <datalist id="searchCity">
+                <option *ngFor="let city of cities" value="{{city}}"></option>
+              </datalist>
+            </div>
+            <div class="upload-stuff" *ngIf="isLoginUserPhotos && isLoggedIn" style="margin-top: 1em">
+              <button class="btn-login btn-nav" type="submit">Save Photo</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="upload-stuff" *ngIf="isLoginUserPhotos && isLoggedIn">
-      <div class="upload-inputs"><label>Title</label><input type="text" formControlName="title"/></div>
-      <div class="upload-inputs"><label>Description</label><input type="text" formControlName="description"/></div>
-      <div class="upload-inputs"><label>Categories</label>
-        <select formControlName="category">
-          <option disabled>None</option>
-          <option *ngFor="let category of categories">{{category}}</option>
-        </select>
+    </form>
+  </div>
+  <div class="upload" *ngIf="isLoginUserPhotos">
+    <div class="upload-stuff">
+      <div style="margin-top: 1em; background-color: whitesmoke; border-radius: 1em; padding: 0.5em">
+        <form [formGroup]="newCityForm" (submit)="addNewCity()">
+          <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
+          <div class="upload-stuff" style="justify-content: center">
+            <label>city name:</label>
+            <input formControlName="name" type="text"/>
+          </div>
+          <div class="upload-stuff" style="justify-content: center">
+            <label>country name:</label>
+            <input formControlName="country" type="text"/>
+          </div>
+          <div class="upload-stuff">
+            <button class="btn-login btn-nav" type="submit">Add City</button>
+          </div>
+        </form>
       </div>
-      <div class="upload-inputs"><label>Location</label>
-        <input formControlName="location" list="searchCity">
-        <datalist id="searchCity">
-          <option *ngFor="let city of cities" value="{{city}}"></option>
-        </datalist>
+      <div *ngIf="isLoginUserPhotos"
+           style="margin-top: 1em; background-color: whitesmoke; border-radius: 1em; padding: 0.5em">
+        <form [formGroup]="newCategoryForm" (submit)="addNewCategory()">
+          <div class="upload-stuff" style="text-align: center">Feel free to add a new category for Photos</div>
+          <div class="upload-stuff" style="justify-content: center">
+            <label>category name:</label>
+            <input formControlName="category" type="text" [maxlength]="60"/>
+          </div>
+          <div class="upload-stuff">
+            <button class="btn-login btn-nav" type="submit">Add Category</button>
+          </div>
+        </form>
       </div>
-    </div>
-    <div class="upload-stuff" *ngIf="isLoginUserPhotos" style="margin-top: 1em">
-      <button class="btn-login btn-nav" type="submit">Save Photo</button>
-    </div>
-  </form>
-  <div class="upload-stuff">
-    <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
-      <form [formGroup]="newCityForm" (submit)="addNewCity()">
-        <div class="upload-stuff" style="text-align: center">If you can't find the city, add it to the database</div>
-        <div class="upload-stuff" style="justify-content: center">
-          <label>city name:</label>
-          <input formControlName="name" type="text"/>
-        </div>
-        <div class="upload-stuff" style="justify-content: center">
-          <label>country name:</label>
-          <input formControlName="country" type="text"/>
-        </div>
-        <div class="upload-stuff">
-          <button class="btn-login btn-nav" type="submit">Add City</button>
-        </div>
-      </form>
-    </div>
-    <div *ngIf="isLoginUserPhotos" style="margin-top: 2em">
-      <form [formGroup]="newCategoryForm" (submit)="addNewCategory()">
-        <div class="upload-stuff" style="text-align: center">Feel free to add a new category for Photos</div>
-        <div class="upload-stuff" style="justify-content: center">
-          <label>category name:</label>
-          <input formControlName="category" type="text" [maxlength]="60"/>
-        </div>
-        <div class="upload-stuff">
-          <button class="btn-login btn-nav" type="submit">Add Category</button>
-        </div>
-      </form>
     </div>
   </div>
   <h1 class="title">All photos ({{photoCount}})</h1>
@@ -75,7 +83,7 @@
       <div class="photo">
         <label>Title: {{photo[1]}}</label>
         <div style="margin-left: auto; margin-right: auto">
-          <img class="viewer" src="{{photo[5]}}" [longDesc]="photo[1]" />
+          <img class="viewer" src="{{photo[5]}}" [longDesc]="photo[1]"/>
         </div>
         <label>Description: {{photo[2]}}</label>
         <label>Rating: {{photo[6]}}</label>
@@ -85,10 +93,12 @@
       </div>
     </div>
   </div>
-  <div class="album-container">
-    Add new album
+  <div *ngIf="isLoginUserPhotos" class="album-container">
+    <div class="add-photo">
+      Add new album
+    </div>
   </div>
   <div class="album-container">
-    All albums
+    <h1 class="title">All albums</h1>
   </div>
 </div>

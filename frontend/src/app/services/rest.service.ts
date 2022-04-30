@@ -34,6 +34,11 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/category', category).toPromise();
     return(message);
   }
+  async savePhoto(photo: any){
+    console.log('saving an image');
+    const message = await this.http.post('http://localhost:3000/photo', photo).toPromise();
+    return(message);
+  }
 
   getPhotos(owner: string): Observable<any>{
     console.log('get all owned photos of user');
@@ -42,12 +47,13 @@ export class RestService {
     parameters = parameters.append('owner', owner);
     return this.http.get<any>( url, {params: parameters});
   }
-  async savePhoto(photo: any){
-    console.log('saving an image');
-    const message = await this.http.post('http://localhost:3000/photo', photo).toPromise();
-    return(message);
+  getLatestPhotos(owner: string): Observable<any>{
+    console.log('get 5 latest photos of user');
+    const url = 'http://localhost:3000/latest';
+    let parameters = new HttpParams;
+    parameters = parameters.append('owner', owner);
+    return this.http.get<any>( url, {params: parameters});
   }
-
   getProfile(username: string): Observable<any>{
     console.log('get profile');
     const url = 'http://localhost:3000/profile/';
@@ -65,9 +71,16 @@ export class RestService {
     const url = 'http://localhost:3000/cities/';
     return this.http.get<any>(url);
   }
+
+
   async removePhoto(photoId: any): Promise<any> {
     console.log('user deleting photo');
     const message = await this.http.post('http://localhost:3000/removePhoto', photoId).toPromise();
+    return(message);
+  }
+  async removeAlbum(album: any): Promise<any>{
+    console.log('removing an album');
+    const message = await this.http.post('http://localhost:3000/removeAlbum', album).toPromise();
     return(message);
   }
 }

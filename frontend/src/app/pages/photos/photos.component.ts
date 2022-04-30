@@ -26,6 +26,7 @@ export class PhotosComponent implements OnInit {
 
   isLoginUserPhotos: boolean = false;
   isLoggedIn: any;
+  photoCategory: any;
   currentUser: string = '';
   newId: string = '';
   photos: any;
@@ -38,7 +39,6 @@ export class PhotosComponent implements OnInit {
   countryName: string = '';
   newCategory: string = '';
   photoCount: number = 0;
-
 
   constructor(private rest: RestService, private toastr: ToastrService) {
   }
@@ -78,8 +78,9 @@ export class PhotosComponent implements OnInit {
     }
   }
 
-  addNewPhoto() {
+  async addNewPhoto() {
     try {
+      this.photoCategory = this.newPhotoForm.controls['category'].value;
       if (this.newPhotoForm.invalid) {
         this.toastr.info('please fill out all required fields', 'Notice');
         return;
@@ -91,6 +92,9 @@ export class PhotosComponent implements OnInit {
         this.toastr.info('Upload an image, please', 'Notice');
         return;
       }
+      if(this.photoCategory === 'None' || this.photoCategory === 'none'){
+        this.photoCategory = 'none';
+      }
       this.newId = this.generatePhotoId();
       const photo = {
         id_photo: this.newId,
@@ -100,32 +104,31 @@ export class PhotosComponent implements OnInit {
         owner: this.currentUser,
         image: this.imageFile,
         currentRating: 0,
-        categories: this.newPhotoForm.controls['category'].value,
+        categories: this.photoCategory,
         location: this.newPhotoForm.controls['location'].value
       }
-      console.log(photo);
-      this.rest.savePhoto(photo);
-      this.newPhotoForm.reset();
-      this.rest.getPhotos(this.user).subscribe(res => {
+      await this.rest.savePhoto(photo);
+      await this.rest.getPhotos(this.user).subscribe(res => {
         this.photos = res;
         this.photoCount = this.photos.length;
       });
+      this.newPhotoForm.reset();
+      this.newPhotoForm.controls['category'].setValue('digital');
+      this.imageFile = '';
       this.toastr.success('Successfully uploaded photo', 'Success');
     } catch (e) {
       this.toastr.error('' + e, 'Error');
     }
   }
 
-  addNewCity() {
+  async addNewCity() {
     try {
-      console.log('hello');
       this.newCityName = this.newCityForm.controls['name'].value;
       this.countryName = this.newCityForm.controls['country'].value;
       if (this.newCityForm.invalid || this.newCityName === null || this.countryName === null){
         this.toastr.info('please fill the form', 'Notice');
         return;
       }
-      console.log('hello');
       this.newId = this.generatePhotoId();
       const city = {
         id_city: this.newId,
@@ -134,8 +137,8 @@ export class PhotosComponent implements OnInit {
         country_name: this.newCityForm.controls['country'].value,
       }
       console.log(city);
-      this.rest.addCity(city);
-      this.rest.getCities();
+      await this.rest.addCity(city);
+      await this.rest.getCities();
       this.newCityForm.reset();
       this.toastr.success('Successfully added a new city', 'Success');
     } catch (e) {
@@ -143,7 +146,7 @@ export class PhotosComponent implements OnInit {
     }
   }
 
-  addNewCategory(){
+  async addNewCategory(){
     try {
       console.log('hello');
       this.newCategory = this.newCategoryForm.controls['category'].value;
@@ -155,11 +158,9 @@ export class PhotosComponent implements OnInit {
       const category = {
         category_name: this.newCategoryForm.controls['category'].value
       }
-      this.rest.addCategory(category);
+      await this.rest.addCategory(category);
       this.newCategoryForm.reset();
-      this.rest.getCategories().subscribe(res => {
-        this.categories = res;
-      });
+      await this.getCategories();
       this.toastr.success('Successfully added a new category', 'Success');
     } catch (e) {
       this.toastr.error('' + e, 'Error');
@@ -182,25 +183,25 @@ export class PhotosComponent implements OnInit {
     });
   }
 
-  getCategories() {
+  async getCategories() {
     this.rest.getCategories().subscribe(res => {
       this.categories = res;
     });
   }
 
-  getCities() {
+  async getCities() {
     this.rest.getCities().subscribe(res => {
       this.cities = res;
     });
   }
 
-  removePhoto(photoId: string): void {
+  async removePhoto(photoId: string) {
     try{
       const id = {
         idPhoto: photoId};
-      this.rest.removePhoto(id);
+      await this.rest.removePhoto(id);
       this.toastr.success('Successfully deleted photo', 'Success');
-      this.getUserPhotos();
+      await this.getUserPhotos();
     } catch (e) {
       this.toastr.error('' + e, 'Error');
     }
