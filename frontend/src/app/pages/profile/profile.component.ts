@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {RestService} from "../../services/rest.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +30,7 @@ export class ProfileComponent implements OnInit {
   user: any;
   link: any;
 
-  constructor(private rest: RestService) { }
+  constructor(private rest: RestService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.updateForm.reset();
@@ -66,7 +67,6 @@ export class ProfileComponent implements OnInit {
   async getUserProfile() {
    this.rest.getProfile(this.user).subscribe(res => {
      this.currentProfile = res;
-     // console.log(JSON.stringify(this.currentProfile));
      this.currentUsername = this.currentProfile[0]['USERNAME'];
      this.currentFull = this.currentProfile[0]['FULL_NAME'];
      this.currentMail = this.currentProfile[0]['EMAIL'];
@@ -80,7 +80,23 @@ export class ProfileComponent implements OnInit {
   updateMyProfile(){
     // this.rest.updateUser();
   }
-  deleteMyProfile(){
-    // this.rest.deleteUser();
+
+  async deleteMyProfile(){
+    try{
+      console.log('lets delete user')
+      await this.rest.deleteUser(this.currentUser).subscribe(res => {
+        let message = res;
+        console.log(message);
+        if(message.message === 'deleted a user'){
+          this.toastr.success('Successfully deleted your account', 'Success');
+          return;
+        } else {
+          this.toastr.success('' + message.message, 'Success');
+          return;
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

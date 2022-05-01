@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('currentUser', loginUser);
         await this.router.navigate([`/main`]);
       } else {
-        this.toastr.error('Bad username/password combo', 'Error');
+        this.toastr.error('Bad username/password combo, make sure to register first', 'Error');
         return;
       }
     } catch (e){

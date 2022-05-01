@@ -83,7 +83,7 @@ export class PhotosComponent implements OnInit {
     try {
       this.photoCategory = this.newPhotoForm.controls['category'].value;
       if (this.imageFile === '') {
-        this.toastr.info('Upload an image, please', 'Notice');
+        this.toastr.info('Please upload an image first', 'Notice');
         return;
       }
       if (this.newPhotoForm.controls['category'].value === null || this.newPhotoForm.controls['location'].value === null) {

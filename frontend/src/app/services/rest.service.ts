@@ -21,6 +21,14 @@ export class RestService {
     const message = await this.http.post('http://localhost:3000/login', currentLogin).toPromise();
     return(message);
   }
+  deleteUser(currentUser: string): Observable<any> {
+    console.log(currentUser);
+    // console.log('deleting a user');
+    let url = 'http://localhost:3000/profile';
+    let parameters = new HttpParams;
+    parameters = parameters.append('id', currentUser);
+    return this.http.delete<any>( url , {params: parameters});
+  }
   async addCity(city: any): Promise<any>{
     // console.log('adding a new city');
     const message = await this.http.post('http://localhost:3000/city', city).toPromise();
@@ -122,4 +130,5 @@ export class RestService {
     parameters = parameters.append('id', photoId.id_photo);
     return this.http.get<any>( url, {params: parameters});
   }
+
 }
