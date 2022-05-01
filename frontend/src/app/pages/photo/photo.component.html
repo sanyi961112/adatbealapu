@@ -1,25 +1,27 @@
 <app-navbar></app-navbar>
 <div class="photo-main">
-  <h1 class="title">
+  <h1 class="title" *ngIf="this.photo">
     Title: {{photo[0][1]}}
   </h1>
   <div class="upload-stuff" *ngIf="this.photo" style="display:flex;margin-left: auto;margin-right: auto">
     <img [src]="photo[0][5]" title="{{photo[0][1]}}" class="viewer-main"/>
     <div style="display:flex;flex-direction: column">
       <div style="margin-top: 1em">Description: {{photo[0][2]}}</div>
-      <div>Upload Time: {{photo[0][3]}}</div>
-      <div>Description: {{photo[0][4]}}</div>
-      <div>Current Rating: {{photo[0][6]}}</div>
-      <div>Category: {{photo[0][7]}}</div>
-      <div>Location: {{photo[0][8]}}</div>
-      <div class="">
+      <div style="margin-top: 1em">Upload Time: {{photo[0][3]}}</div>
+      <div style="margin-top: 1em">Owner: {{photo[0][4]}}</div>
+      <div style="margin-top: 1em">Current Rating: {{photo[0][6]}}</div>
+      <div style="margin-top: 1em">Category: {{photo[0][7]}}</div>
+      <div style="margin-top: 1em">Location: {{photo[0][8]}}</div>
+      <div style="flex-direction: row" *ngIf="isLoggedIn && !isLoginUserPhoto">
         <form [formGroup]="ratingForm" (submit)="saveRating()">
           <select class="search-field" formControlName="rating">
-            <option >none</option>
             <option *ngFor="let rating of values; let i = index" [ngValue]="rating" [selected]="i == 1">{{rating}}</option>
           </select>
-          <button class="btn-login btn-nav" type="submit">Rate this Photo</button>
+          <button class="btn-login btn-nav" type="submit">Rate Photo</button>
         </form>
+      </div>
+      <div *ngIf="!isLoggedIn" style="margin-top: 1em; cursor: pointer" routerLink="/login">
+        Log in to Rate this photo!
       </div>
     </div>
   </div>

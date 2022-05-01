@@ -14,7 +14,7 @@ CREATE TABLE PHOTO (
    uploadDate DATE NOT NULL,
    owner VARCHAR2(64) NOT NULL,
    image CLOB NOT NULL,
-   currentRating NUMBER(4,5) NOT NULL,
+   currentRating FLOAT NOT NULL,
    categories VARCHAR2(60) NOT NULL,
    location VARCHAR2(60) NOT NULL,
    PRIMARY KEY(id_photo),
@@ -55,3 +55,13 @@ CREATE TABLE RATINGS (
 );
 
 /*end of tables*/
+
+/*insert data example*/
+
+INSERT INTO USRS (USERNAME, PASSWORD, FULL_NAME, EMAIL, LOCATION) 
+VALUES ('test','9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'test', 'test', null);
+		
+			 
+/* end of insert data*/			 
+/*megfigyelés: mivel base64 url-ként mentem Clob-ba a képet, nem nagyon sikerült az sqldevelopernek futtatni az insertet, 
+viszont a projektben már simán fel lehet tölteni a fotót*/

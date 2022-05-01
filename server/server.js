@@ -284,6 +284,7 @@ async function loginUser(req, res) {
                AND PASSWORD = :password`,
             [userLogin.username, userLogin.password], {outFormat: oracledb.OUT_FORMAT_OBJECT});
         if (result.rows[0]) {
+
             console.log('user authenticated');
             res.status(201).json({
                 message: 'user authenticated',
@@ -466,5 +467,183 @@ async function removePhoto(req, res) {
         }
     }
 }
+
+app.get('/getRating', getRating);
+/*gets a rating by voter and id_photo*/
+async function getRating(req, res) {
+    let result;
+    try {
+        console.log('trying to get photo by id');
+        console.log(req.query);
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT *
+             FROM "SZABO"."RATINGS"
+             WHERE ID_PHOTO = :id_photo AND VOTER = :voter`,
+            [req.query.id, req.query.voter]);
+        console.log('rating reached');
+        res.status(201).json(result.rows);
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.get('/getRatings', getRatings);
+/*gets all ratings of a photo by photoId*/
+async function getRatings(req, res) {
+    let result;
+    try {
+        console.log('trying to get all ratings of a photo');
+        console.log(req.query);
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `SELECT *
+             FROM "SZABO"."RATINGS"
+             WHERE ID_PHOTO = :id_photo`,
+            [req.query.id]);
+        console.log('ratings reached');
+        res.status(201).json(result.rows);
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.post('/addRating', addRating);
+/*adds a new rating*/
+async function addRating(req, res) {
+    let result;
+    try {
+        const newRating = req.body;
+        console.log('trying to add a new rating');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `INSERT INTO "SZABO"."RATINGS" (ID_RATING, ID_PHOTO, RATING, VOTER)
+             VALUES (:id_rating, :id_photo, :rating, :voter)`,
+            [newRating.id_rating, newRating.id_photo, newRating.rating, newRating.voter]);
+        await connection.commit();
+        console.log("new rating added");
+        res.status(201).json({
+            message: "new rating added"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.post('/updateRating', updateRating);
+/*updates an existing rating*/
+async function updateRating(req, res) {
+    let result;
+    try {
+        const newRating = req.body;
+        console.log(newRating);
+        console.log('trying to update a rating');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `UPDATE "SZABO"."RATINGS" 
+                    SET RATING = :rating
+                    WHERE ID_RATING=:id_rating AND ID_PHOTO = :id_photo`,
+            [newRating.rating, newRating.id_rating, newRating.id_photo]);
+        await connection.commit();
+        console.log("rating updated");
+        res.status(201).json({
+            message: "rating updated"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+app.post('/updatePhotoRating', updatePhotoRating);
+/*updates the rating of a photo*/
+async function updatePhotoRating(req, res) {
+    let result;
+    try {
+        const rating = req.body;
+        console.log(rating);
+        console.log('trying to update a photo rating');
+        const connection = await oracledb.getConnection({
+            user: "SZABO",
+            password: password,
+            connectString: "localhost:1521/xe"
+        });
+        result = await connection.execute(
+            `UPDATE "SZABO"."PHOTO"
+             SET CURRENTRATING = :rating
+             WHERE ID_PHOTO=:id_photo`,
+            [rating.rating, rating.id_photo]);
+        await connection.commit();
+        console.log("photo rating updated");
+        res.status(201).json({
+            message: "photo rating updated"
+        });
+    } catch (err) {
+        console.log(err.message)
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                return console.error(err.message);
+            }
+        }
+    }
+}
+
+
+
 
 app.listen(port, () => console.log("App listening on port %s", port));

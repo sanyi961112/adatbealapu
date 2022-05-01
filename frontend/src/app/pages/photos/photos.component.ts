@@ -82,19 +82,13 @@ export class PhotosComponent implements OnInit {
   async addNewPhoto() {
     try {
       this.photoCategory = this.newPhotoForm.controls['category'].value;
-      if (this.newPhotoForm.invalid) {
-        this.toastr.info('please fill out all required fields', 'Notice');
-        return;
-      }
-      if (this.newPhotoForm.controls['location'].value === null) {
-        this.newPhotoForm.controls['location'].setValue('');
-      }
       if (this.imageFile === '') {
         this.toastr.info('Upload an image, please', 'Notice');
         return;
       }
-      if(this.photoCategory === 'None' || this.photoCategory === 'none'){
-        this.photoCategory = 'none';
+      if (this.newPhotoForm.controls['category'].value === null || this.newPhotoForm.controls['location'].value === null) {
+        this.toastr.info('please fill out all fields', 'Notice');
+        return;
       }
       this.newId = this.generatePhotoId();
       const photo = {

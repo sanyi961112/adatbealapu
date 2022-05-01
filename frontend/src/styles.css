@@ -216,6 +216,7 @@ album-container{
   width: 97vw;
 }
 .photo-main{
+  border-radius: 1em;
   margin-top: 2em;
   margin-left: auto;
   margin-right: auto;
@@ -233,7 +234,7 @@ album-container{
 
 .viewer-main{
   object-fit: contain;
-  max-height: 700px;
+  max-height: 550px;
 }
 
 .search-field {

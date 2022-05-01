@@ -27,8 +27,15 @@ export class NavbarComponent implements OnInit {
     this.currentUser = this.currentUser.replace('"', '');
     if (localStorage.getItem('isLoggedIn') === 'true') {
       this.isLoggedIn = true;
+      if(this.currentUser === ''){
+        this.isLoggedIn = false;
+        localStorage.setItem('isLoggedIn', 'false');
+        this.router.navigate(['/login']);
+      }
     } else {
       this.isLoggedIn = false;
+      localStorage.setItem('isLoggedIn', 'false');
+      localStorage.setItem('currentUser', '');
     }
   }
 

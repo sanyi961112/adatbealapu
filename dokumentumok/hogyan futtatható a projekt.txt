@@ -13,5 +13,6 @@ Adatbázisban(SQL developerben): (Bodnár Péter videója alapján)
 - csatlakozás user/password: system/oracle
 - új user hozzáadása: SZABO/1234 (ezt használja a szerver hogy csatlakozzon) és belépés után
 - adatbázist létrehozó script: script_szabo.sql futtatása
+- a CITIES feltöltése SQL developerrel lett megoldva, importálva utf-8-ban a geonames.csv-ből. (jobb klikk a CITIES táblán és Import Data...)
 
 Ezután frontenden(localhost:4200) lehet regisztrálni/loginolni.
